@@ -1,0 +1,1268 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PowerHUB Project</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            background: linear-gradient(135deg, #0a0a1a, #101020, #151525);
+            font-family: 'Montserrat', sans-serif;
+            color: #e0e0e0;
+            overflow: hidden;
+            position: relative;
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            transition: background-color 0.5s ease, color 0.5s ease;
+        }
+
+        body.light-theme {
+            background: linear-gradient(135deg, #f5f5f5, #e0e0e0, #d3d3d3);
+            color: #333333;
+        }
+
+
+        .top-stripe, .powerhub-text, .footer-text, .image-plate, .more-button, .modal-header, .modal-content p, .modal-content ol, .modal-content pre {
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.9);
+        }
+
+        body.light-theme .top-stripe, body.light-theme .powerhub-text, body.light-theme .footer-text, body.light-theme .image-plate, body.light-theme .more-button, body.light-theme .modal-header, body.light-theme .modal-content p, body.light-theme .modal-content ol, body.light-theme .modal-content pre {
+            text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.7);
+        }
+
+
+        .floating-planets {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+        }
+
+        .planet {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+            opacity: 0.3;
+            animation: float 20s infinite linear;
+        }
+
+        .planet::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1), transparent);
+            opacity: 0;
+            animation: glow 2s infinite alternate;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translate(0, 0);
+            }
+            25% {
+                transform: translate(200px, 150px);
+            }
+            50% {
+                transform: translate(400px, 0);
+            }
+            75% {
+                transform: translate(200px, -150px);
+            }
+            100% {
+                transform: translate(0, 0);
+            }
+        }
+
+        @keyframes glow {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 0.3;
+            }
+        }
+
+        body.light-theme .planet {
+            background: radial-gradient(circle, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.05));
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+
+        .top-stripe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 60px;
+            background: linear-gradient(135deg, #0a0a1a, #101020);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+            animation: glow 2s infinite alternate;
+            text-shadow: 0 0 10px #1e90ff, 0 0 20px #1e90ff, 0 0 30px #1e90ff;
+            transform: translateZ(50px);
+            transition: transform 0.5s ease;
+        }
+
+        @keyframes glow {
+            0% {
+                opacity: 0.8;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+
+        body.light-theme .top-stripe {
+            background: linear-gradient(135deg, #e0e0e0, #d3d3d3);
+            text-shadow: 0 0 10px #0077b6, 0 0 20px #0077b6, 0 0 30px #0077b6;
+            color: #333333;
+        }
+
+        .top-stripe:hover {
+            transform: translateZ(70px);
+        }
+
+
+        .divider {
+            position: absolute;
+            bottom: 180px;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #1e90ff, transparent);
+            animation: dividerMove 3s linear infinite;
+        }
+
+        @keyframes dividerMove {
+            0% {
+                background-position: -100% 0;
+            }
+            100% {
+                background-position: 100% 0;
+            }
+        }
+
+        body.light-theme .divider {
+            background: linear-gradient(90deg, transparent, #0077b6, transparent);
+        }
+
+
+        footer {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            background: transparent;
+            display: flex;
+            align-items: center;
+            padding-left: 40px;
+            transition: background-color 0.3s ease;
+        }
+
+        .powerhub-text {
+            color: white;
+            text-decoration: none;
+            margin-left: 10px;
+            cursor: pointer;
+            transition: color 0.3s ease;
+            text-shadow: 0 0 10px #1e90ff, 0 0 20px #1e90ff;
+            font-weight: bold;
+        }
+
+        body.light-theme .powerhub-text {
+            color: #333333;
+            text-shadow: 0 0 10px #0077b6, 0 0 20px #0077b6;
+        }
+
+
+        .rectangle {
+            width: 550px;
+            height: 800px;
+            border-radius: 25px;
+            overflow: hidden;
+            position: absolute;
+            top: 45%;
+            transform: translateY(-50%);
+            background: rgba(10, 10, 26, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            transition: transform 0.5s ease, box-shadow 0.5s ease;
+            opacity: 0;
+            transform: translateY(50px);
+            animation: fadeInUp 1s ease forwards;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+
+        .rectangle.right {
+            right: 120px;
+            animation-delay: 0.3s;
+        }
+
+        .rectangle.left {
+            left: 120px;
+            animation-delay: 0.6s;
+        }
+
+        .rectangle.center {
+            width: 1000px;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: fadeInUpCenter 1s ease forwards;
+            animation-delay: 0.9s;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(-50%);
+            }
+        }
+
+        @keyframes fadeInUpCenter {
+            to {
+                opacity: 1;
+                transform: translate(-50%, -50%);
+            }
+        }
+
+        .rectangle:hover {
+            transform: translateY(-52%) rotateX(10deg) rotateY(10deg) scale(1.05);
+            box-shadow: 0 20px 40px rgba(30, 144, 255, 0.5);
+        }
+
+        .rectangle.center:hover {
+            transform: translate(-50%, -52%) rotateX(10deg) rotateY(10deg) scale(1.05);
+        }
+
+
+        .rectangle img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            pointer-events: none;
+            transition: transform 0.3s ease;
+            border-radius: 25px;
+        }
+
+        .rectangle:hover img {
+            transform: scale(1.05);
+        }
+
+
+        .image-plate {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 80px;
+            background: linear-gradient(135deg, #0a0a1a, #101020);
+            border-bottom-left-radius: 20px;
+            border-bottom-right-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 15px;
+            box-sizing: border-box;
+            font-size: 14px;
+            line-height: 1.4;
+            text-align: center;
+            transition: background-color 0.3s ease;
+        }
+
+        body.light-theme .image-plate {
+            background: linear-gradient(135deg, #e0e0e0, #d3d3d3);
+            color: #333333;
+        }
+
+
+        .copy-text {
+            background-color: rgba(10, 10, 26, 0.8);
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 0 10px #1e90ff, 0 0 20px #1e90ff;
+        }
+
+        body.light-theme .copy-text {
+            background-color: rgba(255, 255, 255, 0.8);
+            box-shadow: 0 0 10px #0077b6, 0 0 20px #0077b6;
+            color: #333333;
+        }
+
+        .copy-text:hover {
+            transform: rotate(5deg);
+            box-shadow: 0 0 10px rgba(30, 144, 255, 0.5);
+        }
+
+
+        .discord-image {
+            width: 30px;
+            height: 30px;
+            transition: transform 0.3s ease;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .discord-image:hover {
+            transform: rotate(360deg);
+        }
+
+
+        .footer-text {
+            position: absolute;
+            bottom: 140px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 12px;
+            color: #1e90ff;
+            text-align: center;
+            transition: color 0.3s ease;
+            animation: textColorChange 5s infinite alternate;
+        }
+
+        @keyframes textColorChange {
+            0% {
+                color: #1e90ff;
+            }
+            100% {
+                color: #1c86ee;
+            }
+        }
+
+        body.light-theme .footer-text {
+            color: rgba(0, 0, 0, 0.5);
+            animation: textColorChangeLight 5s infinite alternate;
+        }
+
+        @keyframes textColorChangeLight {
+            0% {
+                color: rgba(0, 0, 0, 0.5);
+            }
+            100% {
+                color: rgba(0, 180, 216, 0.8);
+            }
+        }
+
+
+        .theme-menu {
+            position: fixed;
+            top: 70px;
+            right: 20px;
+            background-color: rgba(10, 10, 26, 0.9);
+            border-radius: 15px;
+            padding: 15px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
+            display: none;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 10000;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .theme-menu.visible {
+            display: flex;
+        }
+
+        .theme-menu button {
+            background: none;
+            border: none;
+            color: #e0e0e0;
+            font-size: 16px;
+            cursor: pointer;
+            padding: 10px 15px;
+            border-radius: 10px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            text-align: left;
+        }
+
+        .theme-menu button:hover {
+            background-color: rgba(30, 144, 255, 0.5);
+            color: white;
+        }
+
+
+        .theme-toggle {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            background: url('theme.png') no-repeat center center;
+            background-size: contain;
+            border: none;
+            transition: transform 0.5s ease;
+        }
+
+        .theme-toggle:hover {
+            animation: rotateTheme 1s linear forwards;
+        }
+
+        @keyframes rotateTheme {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+
+        .more-button {
+            position: absolute;
+            bottom: 200px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 50px;
+            background: linear-gradient(135deg, #0a0a1a, #101020);
+            border-radius: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateX(-50%) translateY(0);
+            }
+            50% {
+                transform: translateX(-50%) translateY(-10px);
+            }
+        }
+
+        body.light-theme .more-button {
+            background: linear-gradient(135deg, #e0e0e0, #d3d3d3);
+            color: #333333;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .more-button:hover {
+            transform: translateX(-50%) scale(1.05);
+        }
+
+
+        .modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            width: 800px;
+            height: 600px;
+            background: linear-gradient(135deg, #0a0a1a, #101020);
+            border-radius: 25px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            z-index: 10001;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+            opacity: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        body.light-theme .modal {
+            background: linear-gradient(135deg, #e0e0e0, #d3d3d3);
+            color: #333333;
+        }
+
+        .modal.active {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
+        }
+
+        .modal.closing {
+            transform: translate(-50%, -50%) scale(0);
+            opacity: 0;
+        }
+
+        .modal-header {
+            padding: 20px;
+            font-size: 24px;
+            font-weight: bold;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            text-align: center;
+        }
+
+        body.light-theme .modal-header {
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .modal-content {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            scrollbar-width: none;
+            font-size: 18px;
+        }
+
+        .modal-content::-webkit-scrollbar {
+            display: none;
+        }
+
+        .modal-content p, .modal-content ol, .modal-content pre {
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .modal-footer {
+            padding: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        body.light-theme .modal-footer {
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .modal-tabs {
+            display: flex;
+            gap: 10px;
+        }
+
+        .modal-tab {
+            padding: 10px 20px;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .modal-tab.active {
+            background-color: rgba(30, 144, 255, 0.5);
+        }
+
+        .modal-close {
+            cursor: pointer;
+            font-size: 24px;
+            transition: transform 0.3s ease;
+            position: absolute;
+            right: 20px;
+            top: 20px;
+        }
+
+        .modal-close:hover {
+            transform: rotate(90deg);
+        }
+
+
+        .custom-scrollbar {
+            position: absolute;
+            right: 10px;
+            top: 10px;
+            bottom: 10px;
+            width: 8px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+        }
+
+        .custom-scrollbar-thumb {
+            position: absolute;
+            width: 100%;
+            background-color: rgba(30, 144, 255, 0.8);
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        body.light-theme .custom-scrollbar {
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+
+        body.light-theme .custom-scrollbar-thumb {
+            background-color: rgba(0, 180, 216, 0.8);
+        }
+
+
+        .modal-copy-text {
+            background-color: rgba(10, 10, 26, 0.8);
+            padding: 5px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 0 10px #1e90ff, 0 0 20px #1e90ff;
+            position: absolute;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            height: auto;
+            line-height: 1.5;
+        }
+
+        body.light-theme .modal-copy-text {
+            background-color: rgba(255, 255, 255, 0.8);
+            box-shadow: 0 0 10px #0077b6, 0 0 20px #0077b6;
+            color: #333333;
+        }
+
+        .modal-copy-text:hover {
+            transform: translateX(-50%) rotate(5deg);
+            box-shadow: 0 0 10px rgba(30, 144, 255, 0.5);
+        }
+
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 10000;
+            display: none;
+        }
+
+        .overlay.active {
+            display: block;
+        }
+
+
+        .highlight {
+            color: #FF9100;
+        }
+
+        .highlight-green {
+            color: #97FFA5;
+        }
+
+        .highlight-blue {
+            color: #1e90ff;
+        }
+
+        .highlight-red {
+            color: #FF6C6C;
+        }
+
+        .highlight-orange {
+            color: #FFBF6B;
+        }
+
+        .highlight-yellow {
+            color: #FFD700;
+        }
+
+
+        .parallax {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .parallax-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            transition: transform 0.1s ease-out;
+        }
+
+
+        @keyframes microAnimation {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.02);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .micro-animation {
+            animation: microAnimation 1s infinite;
+        }
+
+
+        .modal-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: center;
+        }
+
+        .modal-table td {
+            padding: 5px;
+        }
+
+        .modal-table .highlight-blue {
+            color: #1e90ff;
+        }
+
+        .modal-table .highlight-yellow {
+            color: #FFD700;
+        }
+
+        .modal-table .highlight-orange {
+            color: #FF9100;
+        }
+
+        .modal-table .highlight-green {
+            color: #97FFA5;
+        }
+    </style>
+</head>
+<body>
+
+<div class="floating-planets">
+    <div class="planet"></div>
+    <div class="planet"></div>
+    <div class="planet"></div>
+    <div class="planet"></div>
+</div>
+
+
+<div class="top-stripe">
+    POWERHUB PROJECT
+    <button class="theme-toggle" onclick="toggleThemeMenu()"></button>
+    <div class="theme-menu">
+        <button onclick="changeTheme('default')">Обычная</button>
+        <button onclick="changeTheme('light')">Светлая</button>
+    </div>
+</div>
+
+
+<div class="divider"></div>
+
+
+<div class="rectangle right">
+    <img src="1stat.jpg" alt="Изображение" class="static-image" data-gif="1.gif">
+    <div class="image-plate">
+        HNS - Это режим, где одна сторона должна догнать вторую, а вторая должна убежать и выжить до конца раунда
+    </div>
+</div>
+
+<div class="rectangle left">
+    <img src="2stat.jpg" alt="Изображение" class="static-image" data-gif="2.gif">
+    <div class="image-plate">
+        PowerHUB - Это проект, посвященный режиму HNS, у нас вы сможете попробовать себя в этом режиме!
+    </div>
+</div>
+
+<div class="rectangle center">
+    <img src="3stat.jpg" alt="Изображение" class="static-image" data-gif="3.gif">
+    <div class="image-plate">
+        IP: 62.122.213.87:1337
+        <div class="copy-text" onclick="copyText()">COPY</div>
+    </div>
+</div>
+
+
+<div class="more-button" onclick="openModal()">
+    ПОДРОБНЕЕ
+</div>
+
+
+<div class="more-button" style="left: calc(50% + 220px);" onclick="openGuideModal()">
+    ГАЙД
+</div>
+
+
+<div class="more-button" style="left: calc(50% - 220px);" onclick="openStatusModal()">
+    СТАТУС
+</div>
+
+
+<footer>
+    <img src="discord.png" alt="Discord" class="discord-image">
+    <a href="https://discord.gg/B9NrT3RYdA" class="powerhub-text" target="_blank">PowerHUB</a>
+</footer>
+
+
+<div class="footer-text">
+    Made by agata<br>
+    ® Авторские права нихуя не защищены
+</div>
+
+
+<div class="modal">
+    <div class="modal-header">
+        <span id="modal-title">HNS</span>
+        <span class="modal-close" onclick="closeModal()">×</span>
+    </div>
+    <div class="modal-content">
+        <div id="hns-content">
+            <p><strong>Что такое HNS?</strong> - Модификация Counter-Strike 1.6, напоминающая игру в прятки. Сыграть сможет каждый и показать на что он способен! Контр-террористы должны поймать (догнать и убить) террористов. Террористы в свою очередь должны продержаться целый раунд и не дать противоположной команде поймать их, для этого им нужно делать различные прыжки/сюрф элементы, чтобы иметь скорость и преимущество.</p>
+        </div>
+        <div id="config-content" style="display: none;">
+            <p><strong>NULL.CFG</strong></p>
+            <pre>
+// Null-cancelling movement script
+// (prevents you from pressing two opposing directions, which causes you to stop moving)
+
+bind "w" "+mfwd"
+bind "a" "+mleft"
+bind "s" "+mback"
+bind "d" "+mright"
+
+alias "+mfwd" "-back;+forward;alias checkfwd +forward"
+alias "+mback" "-forward;+back;alias checkback +back"
+alias "+mleft" "-moveright;+moveleft;alias checkleft +moveleft"
+alias "+mright" "-moveleft;+moveright;alias checkright +mright"
+alias "-mfwd" "-forward;checkback;alias checkfwd none"
+alias "-mback" "-back;checkfwd;alias checkback none"
+alias "-mleft" "-moveleft;checkright;alias checkleft none"
+alias "-mright" "-moveright;checkleft;alias checkright none"
+alias "checkfwd" "none"
+alias "checkback" "none"
+alias "checkleft" "none"
+alias "checkright" "none"
+alias "none" ""
+                </pre>
+            <div class="modal-copy-text" onclick="copyConfig()">COPY</div>
+        </div>
+        <div id="start-content" style="display: none;">
+            <p><strong>Ваш путеводитель</strong></p>
+            <ol>
+                <li>Прочитайте правила !rules</li>
+                <li>Настройте игру для удобства (совет: отключите ускорение мыши)</li>
+                <li>Играйте на режиме и накапливайте опыт игры</li>
+                <li>Заводите приятелей и учитесь вместе!</li>
+            </ol>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="modal-tabs">
+            <div class="modal-tab active" onclick="changeTab('hns')">Что такое HNS?</div>
+            <div class="modal-tab" onclick="changeTab('config')">Конфиги</div>
+            <div class="modal-tab" onclick="changeTab('start')">С чего начать?</div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal" id="guide-modal">
+    <div class="modal-header">
+        <span id="guide-modal-title">Гайд</span>
+        <span class="modal-close" onclick="closeGuideModal()">×</span>
+    </div>
+    <div class="modal-content">
+        <div id="tricks-content">
+            <p><strong>Trix</strong> - это основа HNS, заключаются они в том, чтобы игрок сделал какое-либо действие по карте, при этом действие должно содержать в себе хотя бы малую долю сложности, будь это прыжок или сюрф. Вокруг триксов почти строится весь HNS, ведь триксы — это то, что надо повторять противоположной команде. Триксы вы можете научиться делать, просто много играя на сервере, так в вашей мышечной памяти уже выработаются четкие движения мыши и клавиатуры, что позволит вам делать триксы не осознавая это.</p>
+            <p><strong>Juke</strong> - это не менее важная способность в HNS, с помощью него вы обманываете своего противника и теряетесь в его мониторе, вы можете делать это разными способами. Самыми популярными являются фейковый стрейф в одну сторону, а потом резко в полете поменять стрейф в другую сторону. Juke может помочь вам уронить противника с высоты или выгодной ему позиции тем, что вы просто обманите его движениями и он во время полета потеряет вас и упадет вниз.</p>
+            <p><strong>Surf</strong> - идет наравне с триксами, cюрф это способность "скользить" по текстуре, именно на сюрфе вы можете набирать огромную скорость и летать по карте.</p>
+            <p><strong>DoubleDuck</strong> - Это нажатие колесика мыши вверх/вниз в тайминг при этом делая стрейфы влево и вправо, тем самым на движке Source вы будете набирать скорость. Для начала вам нужно забиндить клавиши <span class="highlight-blue">bind mwheeldown +duck</span> (вниз) / <span class="highlight-blue">bind mwheelup +duck</span> (вверх).</p>
+            <p><strong>BunnyHope</strong> - Это основа HNS, баннихоп это прыжки при которых вы набираете скорость, делая стрейфы в воздухе влево и вправо. Для этого вам нужен бинд: <span class="highlight-blue">bind mwheeldown +jump</span> (вниз) / <span class="highlight-blue">bind mwheelup +jump</span> (вверх).</p>
+            <p><strong>+Strafe</strong> - Это малоизвестная фишка на HNS, с помощью которой вы сможете банихопить кругом при этом не делая движений прицелом. Для этого вам нужен бинд: <span class="highlight-blue">bind клавиша +strafe</span>.</p>
+            <p><strong>Own</strong> - Это доминация одного игрока над другим, овн это когда КТ игрок прыгает на голову Т игроку, тем самым игрок может получить буст скорости.</p>
+        </div>
+        <div id="maps-content" style="display: none;">
+            <p><strong>Основные карты на HNS</strong>, и при этом самыми популярными являются:</p>
+            <p><strong>BBcity</strong> - Карта, пришедшая из CS:GO версии мода. Триксы на ней довольно легко выучить, и эта карта хорошо подойдет для новичков, так как на ней нет особо трудных объектов, и все будет легко после пары минут игры на карте.<br>Сложность: <span class="highlight-green">Легкий</span></p>
+            <p><strong>JukeCity</strong> - Карта, пришедшая из CS:GO версии мода. На этой карте почти нет объектов для выполнения триксов. Карта очень легка тем, что на ней очень мало объектов для взаимодействия, поэтому карта подойдет для новичков.<br>Сложность: <span class="highlight-green">Легкий</span></p>
+            <p><strong>Rayish Brick-World</strong> - Карта, пришедшая из CS 1.6 версии мода. На этой карте очень много подъемов и спусков, а также объектов, с помощью которых опытные игроки теряются из вашего взгляда. Эта карта явно не подходит для новичков, так как они постоянно будут терять скорость из-за большого количества объектов, а больше подойдет для средних игроков.<br>Сложность: <span class="highlight-orange">Средний</span></p>
+            <p><strong>DevBlocks</strong> - Карта, пришедшая из CS:GO версии мода. На этой карте довольно много трудных объектов для новичков, а также слишком много трудных прыжков, на которых неопытный игрок будет умирать. Карта лучше всего подойдет для средних и опытных игроков, но не новичков.<br>Сложность: <span class="highlight-orange">Средний+</span></p>
+            <p><strong>Rooftops</strong> - Карта, пришедшая из CS 1.6 версии мода. На этой карте одно из самых больших количеств объектов для триксов и других трюков. Карта трудна тем, что она очень "узкая", и неопытный игрок будет постоянно врезаться во все подряд. Самая не рекомендуемая карта для начала игры на HNS, но очень подходит для продвинутых игроков.<br>Сложность: <span class="highlight-red">Трудный</span></p>
+            <p>Это был список самых популярных карт, но на режиме есть и другие, менее популярные карты. Важно запомнить, что вам не обязательно вслушиваться в наши советы. Это полностью ваш выбор, где играть на нашем проекте!</p>
+        </div>
+        <div id="progress-content" style="display: none;">
+            <p><strong>Что делать, если вы играете, но не становитесь лучше?</strong></p>
+            <p>Множество игроков, которых я знал на протяжении 4 лет, почти не прогрессировали на HNS. Это заключалось в том, что они не пытались научиться чему-то новому, а просто повторяли все старое и обыденное. Не совершайте ошибок этих людей, и вот вам советы для улучшения игры:</p>
+            <ol>
+                <li><span class="highlight">Не надо расстраиваться</span>, что какой-то podpivas86rus играет лучше вас. Ведь как бы вы не играли, всегда найдется кто-то лучше вас. Порой надо просто поставить для себя цель стать лучше и идти к ней.</li>
+                <li><span class="highlight">Пробуйте что-то новое</span>, а если не можете придумать, то ищите это у других. Можете это делать как в самой игре, так и на других площадках, к примеру, YouTube.</li>
+                <li><span class="highlight">Иногда стоит отдохнуть</span> от игры, если вы играете на протяжении долгого времени.</li>
+                <li><span class="highlight">Попробуйте для себя найти благоприятные настройки</span> "Конфиг" и играйте с ним. Старайтесь не менять чувствительность мыши в игре и прочие важные настройки.</li>
+            </ol>
+            <p>На этом советы кончились. Желаю всем удачи на нашем режиме PowerHUB HNS!</p>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="modal-tabs">
+            <div class="modal-tab active" onclick="changeGuideTab('tricks')">Мувмент</div>
+            <div class="modal-tab" onclick="changeGuideTab('maps')">Карты</div>
+            <div class="modal-tab" onclick="changeGuideTab('progress')">Прогресс</div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal" id="status-modal">
+    <div class="modal-header">
+        <span id="status-modal-title">PowrHUB</span>
+        <span class="modal-close" onclick="closeStatusModal()">×</span>
+    </div>
+    <div class="modal-content">
+        <div id="status-content">
+            <p>Статус сервера: <span id="server-status">Онлайн</span></p>
+            <p>Количество игроков: <span id="player-count">0</span>/<span id="max-players">0</span></p>
+            <p>Текущая карта: <span id="map-name">Неизвестно</span></p>
+            <p>Версия: v34</p>
+            <p>Страна: Россия</p>
+        </div>
+        <div id="info-content" style="display: none;">
+            <p>Текущая сессия</p>
+            <table class="modal-table" id="players-table">
+
+            </table>
+        </div>
+        <div id="leaders-content" style="display: none;">
+            <p>Лидерборд</p>
+            <p style="color: #FFD700;">Лидеры по монетам</p>
+            <table class="modal-table" id="leaders-table">
+
+            </table>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="modal-tabs">
+            <div class="modal-tab active" onclick="changeStatusTab('status')">Статус</div>
+            <div class="modal-tab" onclick="changeStatusTab('info')">Информация</div>
+            <div class="modal-tab" onclick="changeStatusTab('leaders')">Лидеры</div>
+        </div>
+    </div>
+</div>
+
+
+<div class="overlay" onclick="closeAllModals()"></div>
+
+<script>
+
+    const staticImages = document.querySelectorAll('.static-image');
+    staticImages.forEach(img => {
+        const gifSrc = img.getAttribute('data-gif');
+        const staticSrc = img.src;
+
+        img.parentElement.addEventListener('mouseenter', () => {
+            img.src = gifSrc;
+        });
+
+        img.parentElement.addEventListener('mouseleave', () => {
+            img.src = staticSrc;
+        });
+    });
+
+    // Логика для модального окна
+    const modal = document.querySelector('.modal');
+    const modalTabs = document.querySelectorAll('.modal-tab');
+    const modalContents = document.querySelectorAll('.modal-content > div');
+    const modalTitle = document.getElementById('modal-title');
+    const overlay = document.querySelector('.overlay');
+
+    function openModal() {
+        modal.classList.add('active');
+        overlay.classList.add('active');
+    }
+
+    function closeModal() {
+        modal.classList.add('closing');
+        overlay.classList.remove('active');
+        setTimeout(() => {
+            modal.classList.remove('active', 'closing');
+        }, 300);
+    }
+
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            closeModal();
+        }
+    });
+
+    function changeTab(tabName) {
+        modalTabs.forEach(tab => tab.classList.remove('active'));
+        modalContents.forEach(content => content.style.display = 'none');
+
+        document.querySelector(`.modal-tab[onclick="changeTab('${tabName}')"]`).classList.add('active');
+        document.querySelector(`#${tabName}-content`).style.display = 'block';
+
+        if (tabName === 'hns') {
+            modalTitle.textContent = 'HNS';
+        } else if (tabName === 'config') {
+            modalTitle.textContent = 'Конфиги';
+        } else if (tabName === 'start') {
+            modalTitle.textContent = 'С чего начать?';
+        }
+    }
+
+    function copyConfig() {
+        const text = `// Null-cancelling movement script
+// (prevents you from pressing two opposing directions, which causes you to stop moving)
+
+bind "w" "+mfwd"
+bind "a" "+mleft"
+bind "s" "+mback"
+bind "d" "+mright"
+
+alias "+mfwd" "-back;+forward;alias checkfwd +forward"
+alias "+mback" "-forward;+back;alias checkback +back"
+alias "+mleft" "-moveright;+moveleft;alias checkleft +moveleft"
+alias "+mright" "-moveleft;+moveright;alias checkright +mright"
+alias "-mfwd" "-forward;checkback;alias checkfwd none"
+alias "-mback" "-back;checkfwd;alias checkback none"
+alias "-mleft" "-moveleft;checkright;alias checkleft none"
+alias "-mright" "-moveright;checkleft;alias checkright none"
+alias "checkfwd" "none"
+alias "checkback" "none"
+alias "checkleft" "none"
+alias "checkright" "none"
+alias "none" ""`;
+
+        navigator.clipboard.writeText(text).then(() => {
+            alert("Конфиг скопирован!");
+        });
+    }
+
+    function copyIP() {
+        const text = "62.122.213.87:1337";
+        navigator.clipboard.writeText(text).then(() => {
+            alert("IP скопирован: " + text);
+        });
+    }
+
+
+    function toggleThemeMenu() {
+        const themeMenu = document.querySelector(".theme-menu");
+        themeMenu.classList.toggle("visible");
+    }
+
+    function changeTheme(theme) {
+        const body = document.body;
+        body.className = '';
+        body.classList.add(`${theme}-theme`);
+        localStorage.setItem('theme', theme);
+        toggleThemeMenu();
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+        const savedTheme = localStorage.getItem('theme') || 'default';
+        changeTheme(savedTheme);
+    });
+
+    // Логика для модального окна Гайда
+    const guideModal = document.getElementById('guide-modal');
+    const guideModalTabs = document.querySelectorAll('#guide-modal .modal-tab');
+    const guideModalContents = document.querySelectorAll('#guide-modal .modal-content > div');
+    const guideModalTitle = document.getElementById('guide-modal-title');
+
+    function openGuideModal() {
+        guideModal.classList.add('active');
+        overlay.classList.add('active');
+    }
+
+    function closeGuideModal() {
+        guideModal.classList.add('closing');
+        overlay.classList.remove('active');
+        setTimeout(() => {
+            guideModal.classList.remove('active', 'closing');
+        }, 300);
+    }
+
+    guideModal.addEventListener('click', (e) => {
+        if (e.target === guideModal) {
+            closeGuideModal();
+        }
+    });
+
+    function changeGuideTab(tabName) {
+        guideModalTabs.forEach(tab => tab.classList.remove('active'));
+        guideModalContents.forEach(content => content.style.display = 'none');
+
+        document.querySelector(`#guide-modal .modal-tab[onclick="changeGuideTab('${tabName}')"]`).classList.add('active');
+        document.querySelector(`#${tabName}-content`).style.display = 'block';
+
+        if (tabName === 'tricks') {
+            guideModalTitle.textContent = 'МувментЫ';
+        } else if (tabName === 'maps') {
+            guideModalTitle.textContent = 'Карты';
+        } else if (tabName === 'progress') {
+            guideModalTitle.textContent = 'Прогресс';
+        }
+    }
+
+
+    const statusModal = document.getElementById('status-modal');
+    const statusModalTabs = document.querySelectorAll('#status-modal .modal-tab');
+    const statusModalContents = document.querySelectorAll('#status-modal .modal-content > div');
+    const statusModalTitle = document.getElementById('status-modal-title');
+
+    function openStatusModal() {
+        statusModal.classList.add('active');
+        overlay.classList.add('active');
+    }
+
+    function closeStatusModal() {
+        statusModal.classList.add('closing');
+        overlay.classList.remove('active');
+        setTimeout(() => {
+            statusModal.classList.remove('active', 'closing');
+        }, 300);
+    }
+
+    statusModal.addEventListener('click', (e) => {
+        if (e.target === statusModal) {
+            closeStatusModal();
+        }
+    });
+
+    function changeStatusTab(tabName) {
+        statusModalTabs.forEach(tab => tab.classList.remove('active'));
+        statusModalContents.forEach(content => content.style.display = 'none');
+
+        document.querySelector(`#status-modal .modal-tab[onclick="changeStatusTab('${tabName}')"]`).classList.add('active');
+        document.querySelector(`#${tabName}-content`).style.display = 'block';
+
+        if (tabName === 'status') {
+            statusModalTitle.textContent = 'PowrHUB';
+        } else if (tabName === 'info') {
+            statusModalTitle.textContent = 'Текущая сессия';
+        } else if (tabName === 'leaders') {
+            statusModalTitle.textContent = 'Лидерборд';
+        }
+    }
+
+
+    function closeAllModals() {
+        closeModal();
+        closeGuideModal();
+        closeStatusModal();
+    }
+
+    // Функция для получения данных с сервера
+    async function fetchServerInfo() {
+        try {
+            const response = await fetch('/get-server-data');
+            if (!response.ok) {
+                throw new Error('Ошибка при получении данных с сервера');
+            }
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error('Ошибка:', error);
+            return null;
+        }
+    }
+
+
+    async function updateStatusModal() {
+        const serverInfo = await fetchServerInfo();
+        const statusContent = document.getElementById('status-content');
+        const infoContent = document.getElementById('info-content');
+
+        if (serverInfo) {
+            // Обновляем основную информацию о сервере
+            document.getElementById('server-status').textContent = serverInfo.online ? 'Онлайн' : 'Оффлайн';
+            document.getElementById('player-count').textContent = serverInfo.playerCount;
+            document.getElementById('max-players').textContent = serverInfo.maxPlayers;
+            document.getElementById('map-name').textContent = serverInfo.map;
+
+            // Обновляем информацию о игроках
+            const playersTable = document.getElementById('players-table');
+            playersTable.innerHTML = `
+                <tr>
+                    <td>Counter-Terrorist</td>
+                    <td><span class="highlight-blue">Игроки</span></td>
+                    <td>Terrorist</td>
+                </tr>
+            `;
+
+
+            serverInfo.playerNames.forEach((name, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${index % 2 === 0 ? name : ''}</td>
+                    <td></td>
+                    <td>${index % 2 !== 0 ? name : ''}</td>
+                `;
+                playersTable.appendChild(row);
+            });
+
+
+            const leadersTable = document.getElementById('leaders-table');
+            leadersTable.innerHTML = `
+                <tr>
+                    <td><span class="highlight-orange">1.</span> ${serverInfo.playerNames[0] || 'Нет данных'}</td>
+                    <td></td>
+                    <td><span class="highlight-orange">6.</span> ${serverInfo.playerNames[5] || 'Нет данных'}</td>
+                </tr>
+                <tr>
+                    <td><span class="highlight-orange">2.</span> ${serverInfo.playerNames[1] || 'Нет данных'}</td>
+                    <td></td>
+                    <td><span class="highlight-orange">7.</span> ${serverInfo.playerNames[6] || 'Нет данных'}</td>
+                </tr>
+                <tr>
+                    <td><span class="highlight-orange">3.</span> ${serverInfo.playerNames[2] || 'Нет данных'}</td>
+                    <td></td>
+                    <td><span class="highlight-orange">8.</span> ${serverInfo.playerNames[7] || 'Нет данных'}</td>
+                </tr>
+                <tr>
+                    <td><span class="highlight-orange">4.</span> ${serverInfo.playerNames[3] || 'Нет данных'}</td>
+                    <td></td>
+                    <td><span class="highlight-orange">9.</span> ${serverInfo.playerNames[8] || 'Нет данных'}</td>
+                </tr>
+                <tr>
+                    <td><span class="highlight-orange">5.</span> ${serverInfo.playerNames[4] || 'Нет данных'}</td>
+                    <td></td>
+                    <td><span class="highlight-orange">10.</span> ${serverInfo.playerNames[9] || 'Нет данных'}</td>
+                </tr>
+            `;
+        } else {
+            statusContent.innerHTML = `
+                <p>Статус сервера: </p>
+                <p>Количество игроков: </p>
+                <p>Текущая карта: </p>
+                <p>Версия: </p>
+                <p>Страна: </p>
+            `;
+            infoContent.innerHTML = `<p>Данные о игроках недоступны.</p>`;
+        }
+    }
+
+
+    document.querySelector('.more-button[onclick="openStatusModal()"]').addEventListener('click', updateStatusModal);
+
+    // Обновляем данные каждые 5 секунд
+    setInterval(updateStatusModal, 5000);
+</script>
+</body>
+</html>
