@@ -762,6 +762,29 @@
     <div class="planet"></div>
 </div>
 
+<div class="modal" id="status-modal">
+    <div class="modal-header">
+        <span id="status-modal-title">Статус</span>
+        <span class="modal-close" onclick="closeStatusModal()">×</span>
+    </div>
+    <div class="modal-content">
+        <div id="status-content">
+            <!-- TSARVAR WIDGET -->
+            <a href="https://tsarvar.com/servers/counter-strike-source/62.122.213.87:1337" data-tsarvarServerId="449046">Сервер POWERHUB | HIDE N SEEK | CS:GO</a>
+            <script type="text/javascript" charset="utf-8" src="https://widget.tsarvar.com/load.js"></script>
+            <script type="text/javascript">
+                (function(k){(window[k]||(window[k]=[])).push({
+                    element:'*[data-tsarvarServerId="449046"]',
+                    serverId:449046,
+                    serverIp:'62.122.213.87',
+                    serverPort:1337,
+                    color: document.body.classList.contains('light-theme') ? '#e6e8fe' : '#030516'
+                });})('TsarvarWidgetQueue');
+            </script>
+            <!-- /TSARVAR WIDGET -->
+        </div>
+    </div>
+</div>
 
 <div class="top-stripe">
     POWERHUB PROJECT
@@ -826,9 +849,9 @@
 </div>
 
 
-<div class="modal">
+<div class="modal" id="info-modal">
     <div class="modal-header">
-        <span id="modal-title">HNS</span>
+        <span id="info-modal-title">Подробнее</span>
         <span class="modal-close" onclick="closeModal()">×</span>
     </div>
     <div class="modal-content">
@@ -859,7 +882,7 @@ alias "checkback" "none"
 alias "checkleft" "none"
 alias "checkright" "none"
 alias "none" ""
-                </pre>
+            </pre>
             <div class="modal-copy-text" onclick="copyConfig()">COPY</div>
         </div>
         <div id="start-content" style="display: none;">
@@ -880,7 +903,6 @@ alias "none" ""
         </div>
     </div>
 </div>
-
 
 <div class="modal" id="guide-modal">
     <div class="modal-header">
@@ -927,44 +949,6 @@ alias "none" ""
     </div>
 </div>
 
-
-<div class="modal" id="status-modal">
-    <div class="modal-header">
-        <span id="status-modal-title">PowrHUB</span>
-        <span class="modal-close" onclick="closeStatusModal()">×</span>
-    </div>
-    <div class="modal-content">
-        <div id="status-content">
-            <p>Статус сервера: <span id="server-status">Онлайн</span></p>
-            <p>Количество игроков: <span id="player-count">0</span>/<span id="max-players">0</span></p>
-            <p>Текущая карта: <span id="map-name">Неизвестно</span></p>
-            <p>Версия: v34</p>
-            <p>Страна: Россия</p>
-        </div>
-        <div id="info-content" style="display: none;">
-            <p>Текущая сессия</p>
-            <table class="modal-table" id="players-table">
-
-            </table>
-        </div>
-        <div id="leaders-content" style="display: none;">
-            <p>Лидерборд</p>
-            <p style="color: #FFD700;">Лидеры по монетам</p>
-            <table class="modal-table" id="leaders-table">
-
-            </table>
-        </div>
-    </div>
-    <div class="modal-footer">
-        <div class="modal-tabs">
-            <div class="modal-tab active" onclick="changeStatusTab('status')">Статус</div>
-            <div class="modal-tab" onclick="changeStatusTab('info')">Информация</div>
-            <div class="modal-tab" onclick="changeStatusTab('leaders')">Лидеры</div>
-        </div>
-    </div>
-</div>
-
-
 <div class="overlay" onclick="closeAllModals()"></div>
 
 <script>
@@ -983,7 +967,7 @@ alias "none" ""
         });
     });
 
-    // Логика для модального окна
+
     const modal = document.querySelector('.modal');
     const modalTabs = document.querySelectorAll('.modal-tab');
     const modalContents = document.querySelectorAll('.modal-content > div');
@@ -991,15 +975,17 @@ alias "none" ""
     const overlay = document.querySelector('.overlay');
 
     function openModal() {
-        modal.classList.add('active');
+        const infoModal = document.getElementById('info-modal');
+        infoModal.classList.add('active');
         overlay.classList.add('active');
     }
 
     function closeModal() {
-        modal.classList.add('closing');
+        const infoModal = document.getElementById('info-modal');
+        infoModal.classList.add('closing');
         overlay.classList.remove('active');
         setTimeout(() => {
-            modal.classList.remove('active', 'closing');
+            infoModal.classList.remove('active', 'closing');
         }, 300);
     }
 
@@ -1010,20 +996,48 @@ alias "none" ""
     });
 
     function changeTab(tabName) {
+        const infoModal = document.getElementById('info-modal');
+        const modalTabs = infoModal.querySelectorAll('.modal-tab');
+        const modalContents = infoModal.querySelectorAll('.modal-content > div');
+
         modalTabs.forEach(tab => tab.classList.remove('active'));
         modalContents.forEach(content => content.style.display = 'none');
 
-        document.querySelector(`.modal-tab[onclick="changeTab('${tabName}')"]`).classList.add('active');
+        document.querySelector(`#info-modal .modal-tab[onclick="changeTab('${tabName}')"]`).classList.add('active');
         document.querySelector(`#${tabName}-content`).style.display = 'block';
 
         if (tabName === 'hns') {
-            modalTitle.textContent = 'HNS';
+            document.getElementById('info-modal-title').textContent = 'HNS';
         } else if (tabName === 'config') {
-            modalTitle.textContent = 'Конфиги';
+            document.getElementById('info-modal-title').textContent = 'Конфиги';
         } else if (tabName === 'start') {
-            modalTitle.textContent = 'С чего начать?';
+            document.getElementById('info-modal-title').textContent = 'С чего начать?';
         }
     }
+
+    const statusModal = document.getElementById('status-modal');
+    const statusModalTabs = document.querySelectorAll('#status-modal .modal-tab');
+    const statusModalContents = document.querySelectorAll('#status-modal .modal-content > div');
+    const statusModalTitle = document.getElementById('status-modal-title');
+
+    function openStatusModal() {
+        statusModal.classList.add('active');
+        overlay.classList.add('active');
+    }
+
+    function closeStatusModal() {
+        statusModal.classList.add('closing');
+        overlay.classList.remove('active');
+        setTimeout(() => {
+            statusModal.classList.remove('active', 'closing');
+        }, 300);
+    }
+
+    statusModal.addEventListener('click', (e) => {
+        if (e.target === statusModal) {
+            closeStatusModal();
+        }
+    });
 
     function copyConfig() {
         const text = `// Null-cancelling movement script
@@ -1071,6 +1085,7 @@ alias "none" ""`;
         body.className = '';
         body.classList.add(`${theme}-theme`);
         localStorage.setItem('theme', theme);
+        updateWidget(theme); // Обновляем виджет при смене темы
         toggleThemeMenu();
     }
 
@@ -1079,7 +1094,7 @@ alias "none" ""`;
         changeTheme(savedTheme);
     });
 
-    // Логика для модального окна Гайда
+
     const guideModal = document.getElementById('guide-modal');
     const guideModalTabs = document.querySelectorAll('#guide-modal .modal-tab');
     const guideModalContents = document.querySelectorAll('#guide-modal .modal-content > div');
@@ -1120,31 +1135,6 @@ alias "none" ""`;
         }
     }
 
-
-    const statusModal = document.getElementById('status-modal');
-    const statusModalTabs = document.querySelectorAll('#status-modal .modal-tab');
-    const statusModalContents = document.querySelectorAll('#status-modal .modal-content > div');
-    const statusModalTitle = document.getElementById('status-modal-title');
-
-    function openStatusModal() {
-        statusModal.classList.add('active');
-        overlay.classList.add('active');
-    }
-
-    function closeStatusModal() {
-        statusModal.classList.add('closing');
-        overlay.classList.remove('active');
-        setTimeout(() => {
-            statusModal.classList.remove('active', 'closing');
-        }, 300);
-    }
-
-    statusModal.addEventListener('click', (e) => {
-        if (e.target === statusModal) {
-            closeStatusModal();
-        }
-    });
-
     function changeStatusTab(tabName) {
         statusModalTabs.forEach(tab => tab.classList.remove('active'));
         statusModalContents.forEach(content => content.style.display = 'none');
@@ -1168,101 +1158,13 @@ alias "none" ""`;
         closeStatusModal();
     }
 
-    // Функция для получения данных с сервера
-    async function fetchServerInfo() {
-        try {
-            const response = await fetch('/get-server-data');
-            if (!response.ok) {
-                throw new Error('Ошибка при получении данных с сервера');
-            }
-            const data = await response.json();
-            return data;
-        } catch (error) {
-            console.error('Ошибка:', error);
-            return null;
-        }
-    }
-
-
-    async function updateStatusModal() {
-        const serverInfo = await fetchServerInfo();
-        const statusContent = document.getElementById('status-content');
-        const infoContent = document.getElementById('info-content');
-
-        if (serverInfo) {
-            // Обновляем основную информацию о сервере
-            document.getElementById('server-status').textContent = serverInfo.online ? 'Онлайн' : 'Оффлайн';
-            document.getElementById('player-count').textContent = serverInfo.playerCount;
-            document.getElementById('max-players').textContent = serverInfo.maxPlayers;
-            document.getElementById('map-name').textContent = serverInfo.map;
-
-            // Обновляем информацию о игроках
-            const playersTable = document.getElementById('players-table');
-            playersTable.innerHTML = `
-                <tr>
-                    <td>Counter-Terrorist</td>
-                    <td><span class="highlight-blue">Игроки</span></td>
-                    <td>Terrorist</td>
-                </tr>
-            `;
-
-
-            serverInfo.playerNames.forEach((name, index) => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${index % 2 === 0 ? name : ''}</td>
-                    <td></td>
-                    <td>${index % 2 !== 0 ? name : ''}</td>
-                `;
-                playersTable.appendChild(row);
-            });
-
-
-            const leadersTable = document.getElementById('leaders-table');
-            leadersTable.innerHTML = `
-                <tr>
-                    <td><span class="highlight-orange">1.</span> ${serverInfo.playerNames[0] || 'Нет данных'}</td>
-                    <td></td>
-                    <td><span class="highlight-orange">6.</span> ${serverInfo.playerNames[5] || 'Нет данных'}</td>
-                </tr>
-                <tr>
-                    <td><span class="highlight-orange">2.</span> ${serverInfo.playerNames[1] || 'Нет данных'}</td>
-                    <td></td>
-                    <td><span class="highlight-orange">7.</span> ${serverInfo.playerNames[6] || 'Нет данных'}</td>
-                </tr>
-                <tr>
-                    <td><span class="highlight-orange">3.</span> ${serverInfo.playerNames[2] || 'Нет данных'}</td>
-                    <td></td>
-                    <td><span class="highlight-orange">8.</span> ${serverInfo.playerNames[7] || 'Нет данных'}</td>
-                </tr>
-                <tr>
-                    <td><span class="highlight-orange">4.</span> ${serverInfo.playerNames[3] || 'Нет данных'}</td>
-                    <td></td>
-                    <td><span class="highlight-orange">9.</span> ${serverInfo.playerNames[8] || 'Нет данных'}</td>
-                </tr>
-                <tr>
-                    <td><span class="highlight-orange">5.</span> ${serverInfo.playerNames[4] || 'Нет данных'}</td>
-                    <td></td>
-                    <td><span class="highlight-orange">10.</span> ${serverInfo.playerNames[9] || 'Нет данных'}</td>
-                </tr>
-            `;
-        } else {
-            statusContent.innerHTML = `
-                <p>Статус сервера: </p>
-                <p>Количество игроков: </p>
-                <p>Текущая карта: </p>
-                <p>Версия: </p>
-                <p>Страна: </p>
-            `;
-            infoContent.innerHTML = `<p>Данные о игроках недоступны.</p>`;
-        }
-    }
 
 
     document.querySelector('.more-button[onclick="openStatusModal()"]').addEventListener('click', updateStatusModal);
 
-    // Обновляем данные каждые 5 секунд
+
     setInterval(updateStatusModal, 5000);
+
 </script>
 </body>
 </html>
